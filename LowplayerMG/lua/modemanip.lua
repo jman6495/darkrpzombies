@@ -1,13 +1,15 @@
+-- Gets config
+include('config.lua');
 
 --gets number of players currently in the server, checks if it is enough, returns true or false
 
 function getplayers()
     players=#player.GetAll();
     PrintMessage( HUD_PRINTTALK, players );
-    if ( players <= 4 ) then
+    if ( players <= minplayers ) then
         return false;
     else
-        if ( players >= 6 ) then
+        if ( players >= maxplayers ) then
             return true;
             end;
     end;
@@ -19,9 +21,11 @@ function initzombies()
     include('zombiespawns.lua');
     zombie={};
     for key,value in pairs(spawnpoints) do
-        zombie[key] = ents.Create("npc_zombie");
-        zombie[key]:SetPos(value);
-        zombie[key]:Spawn();
+        if math.random(0, 100) <= zombieprobabilty then
+            zombie[key] = ents.Create("npc_zombie");
+            zombie[key]:SetPos(value);
+            zombie[key]:Spawn();
+        end;
     zombiemode=true;
     end;
 end;
@@ -32,9 +36,11 @@ function createzombies()
     for key,value in pairs(spawnpoints) do
         if IsValid ( zombie[key] ) then
             else
-                zombie[key] = ents.Create("npc_zombie");
-                zombie[key]:SetPos(value);
-                zombie[key]:Spawn();
+                if math.random(0, 100) <= zombieprobabilty then
+                    zombie[key] = ents.Create("npc_zombie");
+                    zombie[key]:SetPos(value);
+                    zombie[key]:Spawn();
+                end;
             end;
     end;
 end;
@@ -45,9 +51,11 @@ function initweapons()
     include('weaponlist.lua')
     weapon={};
     for key,value in pairs(spawnpoints) do
-        weapon[key] = ents.Create(weaponlist[ math.random( #weaponlist ) ]);
-        weapon[key]:SetPos(value);
-        weapon[key]:Spawn();
+        if math.random(0, 100) <= weaponprobabilty then
+            weapon[key] = ents.Create(weaponlist[ math.random( #weaponlist ) ]);
+            weapon[key]:SetPos(value);
+            weapon[key]:Spawn();
+        end;
     weaponmode=true;
     end;
 end;
@@ -58,9 +66,11 @@ function createweapons()
     for key,value in pairs(spawnpoints) do
         if IsValid ( weapon[key] ) then
             else
-                weapon[key] = ents.Create(weaponlist[ math.random( #weaponlist ) ]);
-                weapon[key]:SetPos(value);
-                weapon[key]:Spawn();
+                if math.random(0, 100) <= weaponprobabilty then
+                    weapon[key] = ents.Create(weaponlist[ math.random( #weaponlist ) ]);
+                    weapon[key]:SetPos(value);
+                    weapon[key]:Spawn();
+                end;
             end;
     end;
 end;
